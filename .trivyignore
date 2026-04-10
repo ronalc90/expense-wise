@@ -1,0 +1,7 @@
+# ============================================
+# Trivy - Vulnerabilidades ignoradas
+# Documentar razon para cada CVE ignorado
+# ============================================
+
+# Ejemplo: CVE con fix no disponible en la version base de Alpine
+# CVE-2024-XXXXX

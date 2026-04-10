@@ -1,0 +1,87 @@
+# ============================================
+# ExpenseWise - Stack de Observabilidad
+# Uso: docker compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d
+# ============================================
+
+services:
+  # ── Prometheus (metricas) ──────────────────
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: expensewise-prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - expensewise-net
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+
+  # ── Grafana (dashboards) ───────────────────
+  grafana:
+    image: grafana/grafana:10.4.0
+    container_name: expensewise-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_INSTALL_PLUGINS: grafana-loki-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3000:3000"
+    networks:
+      - expensewise-net
+    depends_on:
+      - prometheus
+      - loki
+    restart: unless-stopped
+
+  # ── Loki (agregacion de logs) ──────────────
+  loki:
+    image: grafana/loki:2.9.6
+    container_name: expensewise-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - loki_data:/loki
+      - ./monitoring/loki.yml:/etc/loki/local-config.yaml:ro
+    networks:
+      - expensewise-net
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: unless-stopped
+
+  # ── Promtail (recoleccion de logs) ─────────
+  promtail:
+    image: grafana/promtail:2.9.6
+    container_name: expensewise-promtail
+    volumes:
+      - ./monitoring/promtail.yml:/etc/promtail/config.yml:ro
+      - /var/log:/var/log:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    networks:
+      - expensewise-net
+    depends_on:
+      - loki
+    command: -config.file=/etc/promtail/config.yml
+    restart: unless-stopped
+
+volumes:
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  loki_data:
+    driver: local
+
+networks:
+  expensewise-net:
+    driver: bridge
+    name: expensewise-network

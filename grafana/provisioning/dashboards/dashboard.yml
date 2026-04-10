@@ -1,0 +1,18 @@
+# ============================================
+# Grafana - Provisionamiento de dashboards
+# ============================================
+
+apiVersion: 1
+
+providers:
+  - name: 'ExpenseWise'
+    orgId: 1
+    folder: 'ExpenseWise'
+    type: file
+    disableDeletion: false
+    editable: true
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false

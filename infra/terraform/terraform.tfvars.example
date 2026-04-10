@@ -1,0 +1,32 @@
+# ============================================
+# ExpenseWise - Variables de ejemplo
+# Copiar a terraform.tfvars y ajustar valores
+# ============================================
+
+# General
+project_name = "expensewise"
+environment  = "production"
+aws_region   = "us-east-1"
+
+# Red
+vpc_cidr = "10.0.0.0/16"
+
+# ECS
+container_image = "ghcr.io/ronalc90/expensewise:latest"
+task_cpu        = "512"     # 0.5 vCPU
+task_memory     = "1024"    # 1 GB
+desired_count   = 2
+min_capacity    = 1
+max_capacity    = 6
+
+# Base de datos
+db_instance_class = "db.t3.micro"
+db_name           = "expensewise"
+db_username       = "expensewise"
+db_password       = "CAMBIAR_POR_CLAVE_SEGURA"
+
+# Redis
+redis_node_type = "cache.t3.micro"
+
+# Seguridad
+jwt_secret = "CAMBIAR_POR_SECRETO_JWT_SEGURO_256_BITS"
