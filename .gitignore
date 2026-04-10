@@ -1,0 +1,41 @@
+# Build
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+.project
+.classpath
+.settings/
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+*.log
+
+# Database
+*.db
+*.sqlite
+
+# Node (si aplica)
+node_modules/
+
+# Claude / AI config
+.claude/
+CLAUDE.md
+memory/
+
+# Docs internos (no publicar)
+docs/LAUNCH_STRATEGY.md
+docs/MONETIZATION.md
+docs/MVP_SCOPE.md
+docs/TECHNICAL_ARCHITECTURE.md
+docs/USER_STORIES.md

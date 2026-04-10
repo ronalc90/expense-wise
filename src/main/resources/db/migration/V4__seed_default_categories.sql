@@ -1,0 +1,15 @@
+INSERT INTO categories (name, icon, is_default) VALUES
+    ('Food & Dining',    'utensils',      TRUE),
+    ('Transportation',   'car',           TRUE),
+    ('Housing',          'home',          TRUE),
+    ('Utilities',        'zap',           TRUE),
+    ('Healthcare',       'heart-pulse',   TRUE),
+    ('Entertainment',    'film',          TRUE),
+    ('Shopping',         'shopping-bag',  TRUE),
+    ('Education',        'book-open',     TRUE),
+    ('Travel',           'plane',         TRUE),
+    ('Software & Tools', 'laptop',        TRUE),
+    ('Office Supplies',  'paperclip',     TRUE),
+    ('Insurance',        'shield',        TRUE),
+    ('Taxes',            'landmark',      TRUE),
+    ('Other',            'more-horizontal', TRUE);
