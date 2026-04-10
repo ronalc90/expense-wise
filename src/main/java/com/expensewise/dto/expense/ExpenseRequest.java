@@ -20,5 +20,6 @@ public record ExpenseRequest(
     @NotNull(message = "Expense date is required")
     LocalDate expenseDate,
 
+    @Size(max = 500, message = "Receipt URL must not exceed 500 characters")
     String receiptUrl
 ) {}

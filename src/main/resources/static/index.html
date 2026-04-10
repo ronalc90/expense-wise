@@ -442,9 +442,9 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-slate-400 mb-2">Contrasena</label>
-                                    <input type="password" x-model="registerForm.password" required minlength="6"
+                                    <input type="password" x-model="registerForm.password" required minlength="8"
                                            class="glass-input w-full px-4 py-3 rounded-xl text-sm"
-                                           placeholder="Minimo 6 caracteres">
+                                           placeholder="Minimo 8 caracteres">
                                 </div>
                                 <button type="submit" :disabled="loading"
                                         class="glass-btn w-full py-3.5 text-sm font-bold text-white rounded-xl flex items-center justify-center gap-2">
@@ -576,7 +576,7 @@
                             </div>
                             <span class="text-xs font-medium text-slate-500 uppercase tracking-wider">Cantidad</span>
                         </div>
-                        <p class="text-3xl font-bold text-white number" x-text="summary.expenseCount || 0"></p>
+                        <p class="text-3xl font-bold text-white number" x-text="summary.transactionCount || 0"></p>
                         <p class="text-sm text-slate-500 mt-1">Transacciones</p>
                     </div>
 
@@ -808,9 +808,9 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-400 mb-2">Descripcion</label>
-                                <input type="text" x-model="expenseForm.description" required
+                                <input type="text" x-model="expenseForm.description"
                                        class="glass-input w-full px-4 py-3 rounded-xl text-sm"
-                                       placeholder="Describe tu gasto">
+                                       placeholder="Describe tu gasto (opcional)">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-400 mb-2">Categoria</label>
@@ -1144,7 +1144,7 @@
                 },
 
                 async createExpense() {
-                    if (!this.expenseForm.amount || !this.expenseForm.description || !this.expenseForm.categoryId) return;
+                    if (!this.expenseForm.amount || !this.expenseForm.categoryId) return;
                     this.loading = true;
                     const data = await this.apiCall('/api/expenses', {
                         method: 'POST',
@@ -1188,7 +1188,7 @@
                     const [summaryData, catData, trendRes] = await Promise.all([
                         this.apiCall(`/api/dashboard/summary${params}`, { headers: this.authHeaders() }),
                         this.apiCall(`/api/dashboard/by-category${params}`, { headers: this.authHeaders() }),
-                        this.apiCall(`/api/dashboard/trend${params}`, { headers: this.authHeaders() })
+                        this.apiCall(`/api/dashboard/monthly-trend${params}`, { headers: this.authHeaders() })
                     ]);
 
                     if (summaryData) this.summary = summaryData;

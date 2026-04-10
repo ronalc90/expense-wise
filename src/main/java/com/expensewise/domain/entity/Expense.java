@@ -33,12 +33,13 @@ public class Expense {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal amount;
 
+    @Column(length = 500)
     private String description;
 
     @Column(name = "expense_date", nullable = false)
     private LocalDate expenseDate;
 
-    @Column(name = "receipt_url")
+    @Column(name = "receipt_url", length = 500)
     private String receiptUrl;
 
     @CreationTimestamp
