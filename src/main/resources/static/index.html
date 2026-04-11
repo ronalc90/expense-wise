@@ -543,6 +543,21 @@
                     <p class="text-sm text-slate-500" x-text="'Hola, ' + (userName || 'Usuario')"></p>
                 </div>
                 <div class="flex items-center gap-4">
+                    <!-- Export Buttons -->
+                    <div x-show="currentPage === 'dashboard'" class="flex items-center gap-2">
+                        <button @click="exportCSV()"
+                                class="glass-btn-outline px-4 py-2 rounded-xl text-xs font-medium flex items-center gap-2"
+                                title="Exportar CSV">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            CSV
+                        </button>
+                        <button @click="exportPDF()"
+                                class="glass-btn-outline px-4 py-2 rounded-xl text-xs font-medium flex items-center gap-2"
+                                title="Exportar PDF">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                            PDF
+                        </button>
+                    </div>
                     <div class="text-right">
                         <p class="text-xs text-slate-500">Fecha actual</p>
                         <p class="text-sm text-slate-300 number" x-text="new Date().toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'})"></p>
@@ -568,7 +583,7 @@
                 </div>
 
                 <!-- Stat Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                <div x-show="summary.transactionCount > 0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
                     <!-- Total Gastos -->
                     <div class="stat-card rounded-2xl p-6 card-hover-lift" data-aos="zoom-in" data-aos-delay="0">
                         <div class="flex items-center justify-between mb-4">
@@ -618,8 +633,22 @@
                     </div>
                 </div>
 
+                <!-- Empty Dashboard State -->
+                <div x-show="!summary.transactionCount && !dashboardLoading" class="glass rounded-2xl p-12 mb-8 text-center">
+                    <div class="w-20 h-20 rounded-2xl bg-emerald-500/10 flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Bienvenido a ExpenseWise</h3>
+                    <p class="text-slate-400 mb-6 max-w-md mx-auto">Aun no tienes gastos registrados en este periodo. Comienza a registrar tus gastos para ver estadisticas y graficos detallados.</p>
+                    <button @click="currentPage = 'expenses'; loadExpenses(); showExpenseModal = true; resetExpenseForm()"
+                            class="glass-btn px-6 py-3 text-sm font-bold text-white rounded-xl inline-flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        Registrar mi primer gasto
+                    </button>
+                </div>
+
                 <!-- Charts Row -->
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+                <div x-show="summary.transactionCount > 0" class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
                     <!-- Doughnut Chart -->
                     <div class="glass rounded-2xl p-6">
                         <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
@@ -650,7 +679,7 @@
                 </div>
 
                 <!-- Top Categories List -->
-                <div class="glass rounded-2xl p-6">
+                <div x-show="summary.transactionCount > 0" class="glass rounded-2xl p-6">
                     <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
                         <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                         Top Categorias
@@ -756,11 +785,16 @@
 
                     <!-- Empty State -->
                     <div x-show="expenses.length === 0" class="text-center py-16">
-                        <div class="w-16 h-16 rounded-2xl bg-slate-800/50 flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                         </div>
-                        <p class="text-slate-500 text-sm mb-1">No hay gastos registrados</p>
-                        <p class="text-slate-600 text-xs">Agrega tu primer gasto para comenzar</p>
+                        <p class="text-slate-400 text-sm mb-1">No tienes gastos registrados</p>
+                        <p class="text-slate-500 text-xs mb-4">Registra tu primer gasto para comenzar a controlar tus finanzas</p>
+                        <button @click="showExpenseModal = true; resetExpenseForm()"
+                                class="glass-btn px-5 py-2.5 text-sm font-semibold text-white rounded-xl inline-flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            Nuevo Gasto
+                        </button>
                     </div>
 
                     <!-- Pagination -->
@@ -956,6 +990,7 @@
                 dashEndDate: '',
                 categoryChart: null,
                 trendChart: null,
+                dashboardLoading: false,
 
                 // Expenses
                 expenses: [],
@@ -1022,7 +1057,7 @@
                     };
                 },
 
-                async apiCall(url, options = {}) {
+                async apiCall(url, options = {}, silent = false) {
                     try {
                         const res = await fetch(url, options);
                         if (res.status === 401 || res.status === 403) {
@@ -1037,7 +1072,7 @@
                         const text = await res.text();
                         return text ? JSON.parse(text) : {};
                     } catch (e) {
-                        this.showToast(e.message || 'Error de conexion', 'error');
+                        if (!silent) this.showToast(e.message || 'Error de conexion', 'error');
                         return null;
                     }
                 },
@@ -1198,20 +1233,75 @@
                     if (this.dashEndDate) params += `endDate=${this.dashEndDate}&`;
                     if (params) params = '?' + params.slice(0, -1);
 
+                    this.dashboardLoading = true;
+
                     const [summaryData, catData, trendRes] = await Promise.all([
-                        this.apiCall(`/api/dashboard/summary${params}`, { headers: this.authHeaders() }),
-                        this.apiCall(`/api/dashboard/by-category${params}`, { headers: this.authHeaders() }),
-                        this.apiCall(`/api/dashboard/monthly-trend${params}`, { headers: this.authHeaders() })
+                        this.apiCall(`/api/dashboard/summary${params}`, { headers: this.authHeaders() }, true),
+                        this.apiCall(`/api/dashboard/by-category${params}`, { headers: this.authHeaders() }, true),
+                        this.apiCall(`/api/dashboard/monthly-trend${params}`, { headers: this.authHeaders() }, true)
                     ]);
 
-                    if (summaryData) this.summary = summaryData;
-                    if (catData) this.categoryData = catData;
-                    if (trendRes) this.trendData = trendRes;
+                    this.summary = summaryData || { totalExpenses: 0, transactionCount: 0, averageExpense: 0, highestExpense: 0 };
+                    this.categoryData = catData || [];
+                    this.trendData = trendRes || [];
+
+                    this.dashboardLoading = false;
 
                     this.$nextTick(() => {
                         this.renderCategoryChart();
                         this.renderTrendChart();
                     });
+                },
+
+                // ---- EXPORT ----
+                exportCSV() {
+                    let params = '';
+                    if (this.dashStartDate) params += `startDate=${this.dashStartDate}&`;
+                    if (this.dashEndDate) params += `endDate=${this.dashEndDate}&`;
+                    if (params) params = '?' + params.slice(0, -1);
+                    const url = `/api/export/csv${params}`;
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'gastos.csv');
+                    // Use fetch to add auth header
+                    fetch(url, { headers: this.authHeaders() })
+                        .then(res => {
+                            if (!res.ok) throw new Error('Error al exportar');
+                            return res.blob();
+                        })
+                        .then(blob => {
+                            const blobUrl = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = blobUrl;
+                            a.download = 'gastos.csv';
+                            a.click();
+                            URL.revokeObjectURL(blobUrl);
+                            this.showToast('Archivo CSV descargado');
+                        })
+                        .catch(() => this.showToast('Error al exportar CSV', 'error'));
+                },
+
+                exportPDF() {
+                    let params = '';
+                    if (this.dashStartDate) params += `startDate=${this.dashStartDate}&`;
+                    if (this.dashEndDate) params += `endDate=${this.dashEndDate}&`;
+                    if (params) params = '?' + params.slice(0, -1);
+                    const url = `/api/export/pdf${params}`;
+                    fetch(url, { headers: this.authHeaders() })
+                        .then(res => {
+                            if (!res.ok) throw new Error('Error al exportar');
+                            return res.blob();
+                        })
+                        .then(blob => {
+                            const blobUrl = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = blobUrl;
+                            a.download = 'gastos.pdf';
+                            a.click();
+                            URL.revokeObjectURL(blobUrl);
+                            this.showToast('Archivo PDF descargado');
+                        })
+                        .catch(() => this.showToast('Error al exportar PDF', 'error'));
                 },
 
                 renderCategoryChart() {
