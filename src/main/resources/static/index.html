@@ -9,7 +9,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
@@ -347,7 +346,7 @@
                 <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full">
 
                     <!-- LEFT: Hero Text + Features -->
-                    <div class="fade-in" data-aos="fade-right" data-aos-duration="900">
+                    <div class="fade-in" data-aos-duration="900">
                         <div class="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6">
                             <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
                             <span class="text-xs font-medium text-emerald-400 uppercase tracking-wider">Plataforma Financiera</span>
@@ -391,7 +390,7 @@
                     </div>
 
                     <!-- RIGHT: Inline Auth Form (always visible) -->
-                    <div id="auth-section" class="flex justify-center lg:justify-end" data-aos="fade-left" data-aos-duration="900" data-aos-delay="200">
+                    <div id="auth-section" class="flex justify-center lg:justify-end" data-aos-duration="900">
                         <div class="glass-strong rounded-3xl p-8 w-full max-w-md shadow-2xl">
 
                             <!-- Tabs -->
@@ -585,7 +584,7 @@
                 <!-- Stat Cards -->
                 <div x-show="summary.transactionCount > 0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
                     <!-- Total Gastos -->
-                    <div class="stat-card rounded-2xl p-6 card-hover-lift" data-aos="zoom-in" data-aos-delay="0">
+                    <div class="stat-card rounded-2xl p-6 card-hover-lift">
                         <div class="flex items-center justify-between mb-4">
                             <div class="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center">
                                 <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
@@ -597,7 +596,7 @@
                     </div>
 
                     <!-- Cantidad -->
-                    <div class="stat-card rounded-2xl p-6 card-hover-lift" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="stat-card rounded-2xl p-6 card-hover-lift">
                         <div class="flex items-center justify-between mb-4">
                             <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
                                 <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
@@ -609,7 +608,7 @@
                     </div>
 
                     <!-- Promedio -->
-                    <div class="stat-card rounded-2xl p-6 card-hover-lift" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="stat-card rounded-2xl p-6 card-hover-lift">
                         <div class="flex items-center justify-between mb-4">
                             <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
                                 <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
@@ -621,7 +620,7 @@
                     </div>
 
                     <!-- Mayor Gasto -->
-                    <div class="stat-card rounded-2xl p-6 card-hover-lift" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="stat-card rounded-2xl p-6 card-hover-lift">
                         <div class="flex items-center justify-between mb-4">
                             <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
                                 <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
@@ -1452,9 +1451,7 @@
             };
         }
     </script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' });
 
         // Counter animation for stat numbers
         function animateCounters() {
